@@ -28,7 +28,6 @@
             </nav>
         </header>
 
-
         <section class="section">
             <h2>$ cat contact.info</h2>
             <div class="card-grid">
@@ -72,7 +71,46 @@
                 </div>
             </div>
         </section>
+<section class="section">
+    <br>
+    <h2>$ gpg --export --armor</h2>
+    <div class="card">
+        <h3 class="card-title">> pgp public key</h3>
+        <p class="card-description">
+            Encrypted communication.
+        </p>
+        
+        <div class="contact-info">
+            <code>fingerprint: BF4D 1306 36CE 98D7 9FEB F022 7F2F 5D58 35EA 0FF5</code>
+        </div>
+        
+        <div class="code-block">
+            <pre class="pgp-key" style="margin: 0; white-space: pre-wrap; word-break: break-all; font-family: var(--font-mono); font-size: 0.75rem;" id="pgp-key-block">
+-----BEGIN PGP PUBLIC KEY BLOCK-----
 
+mDMEab7VaRYJKwYBBAHaRw8BAQdALLfJGYwY4QZvGvAoQvrJ6fiKAYzr1CdMvIG6
+gOUH46a0KkxvcHVoIChmcmVlZG9tIHJ1bGVzKSA8MW9wdWhhcnRAZ21haWwuY29t
+PoiQBBMWCgA4FiEEv00TBjbOmNef6/Aify9dWDXqD/UFAmm+1WkCGwMFCwkIBwIG
+FQoJCAsCBBYCAwECHgECF4AACgkQfy9dWDXqD/VpJwD7Bqnzo6iL8KwFO0Wdec7J
+ZDSh5Cn1xVY27/sVhYksI4oA/2y40bvts6FS7S4aKln1cO5CVFPu/jPwPE9PLOrT
+CNsAuDgEab7VaRIKKwYBBAGXVQEFAQEHQHQ2wFqvbs9Hs8fDlcyyErYTeqwYsJYn
+SAc6NihgXS0FAwEIB4h4BBgWCgAgFiEEv00TBjbOmNef6/Aify9dWDXqD/UFAmm+
+1WkCGwwACgkQfy9dWDXqD/WdTQEAmqr7/2NR75XrETpS7X+tWhObDWnFlejEuR2B
+KHt7KyABANdkx/rEJQxaKUlxWMlyUfVhICJGt8X15WUEmxZTR+kM
+=TO6x
+-----END PGP PUBLIC KEY BLOCK-----
+
+</pre>
+        </div>
+        
+        <div class="contact-info" style="margin-top: 1rem;">
+            <div class="text-sm" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.75rem;">
+                <button id="copy-key-btn" class="link" style="cursor: pointer; background: none; border: none;">copy key</button>
+                <a href="#" id="download-key" class="link" style="cursor: pointer;">download key</a>
+            </div>
+        </div>
+    </div>
+</section>
 
 
         <footer class="footer">
