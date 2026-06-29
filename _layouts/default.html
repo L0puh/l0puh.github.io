@@ -1,0 +1,78 @@
+---
+layout: base
+---
+
+<div class="container">
+
+  <section class="hero">
+    <div class="hero-grid">
+      <div class="hero-intro">
+        <p class="hero-prompt"><span class="dim">root@null:~$</span> whoami</p>
+        <h1 class="hero-title">{{ page.title }}<span class="blink">_</span></h1>
+        <p class="hero-subtitle">{{ page.subtitle }}</p>
+        <p class="hero-bio">{{ page.bio }}</p>
+        <div class="hero-actions">
+          <a href="{{ '/log/' | relative_url }}" class="btn">cat ./log</a>
+          <a href="{{ '/projects/' | relative_url }}" class="btn btn-ghost">ls ./projects</a>
+        </div>
+      </div>
+      <div class="hero-aside">
+        <div class="skill-block">
+          <p class="block-label">// skills</p>
+          {% for group in page.skills %}
+          <div class="skill-group">
+            <p class="skill-group-name">{{ group.name }}</p>
+            <div class="skill-tags">
+              {% for item in group.items %}
+              <span class="tag">{{ item }}</span>
+              {% endfor %}
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+
+        <div class="status-block">
+          <p class="block-label">// status</p>
+          {% for item in page.status %}
+          <p class="status-line"><span class="dot {% if item.active %}dot-on{% endif %}"></span>{{ item.label }}</p>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="recent-section">
+    <div class="section-header">
+      <span class="section-label">recent entries</span>
+      <a href="{{ '/log/' | relative_url }}" class="section-link">view all →</a>
+    </div>
+    <div class="post-list">
+      {% assign recent = site.posts | limit: 4 %}
+      {% for post in recent %}
+      <a href="{{ post.url | relative_url }}" class="post-row">
+        <span class="post-date">{{ post.date | date: "%Y.%m.%d" }}</span>
+        <span class="post-title">{{ post.title }}</span>
+        <span class="post-tag">{{ post.tags | first }}</span>
+      </a>
+      {% endfor %}
+    </div>
+  </section>
+
+  <section class="recent-section">
+    <div class="section-header">
+      <span class="section-label">recent projects</span>
+      <a href="{{ '/projects/' | relative_url }}" class="section-link">view all →</a>
+    </div>
+    <div class="post-list">
+      {% assign recent_projects = site.projects | limit: 3 %}
+      {% for project in recent_projects %}
+      <a href="{{ project.url | relative_url }}" class="post-row">
+        <span class="post-date">{{ project.date | date: "%Y" }}</span>
+        <span class="post-title">{{ project.title }}</span>
+        <span class="post-tag status-{{ project.status | downcase | replace: ' ', '-' }}">{{ project.status }}</span>
+      </a>
+      {% endfor %}
+    </div>
+  </section>
+
+</div>

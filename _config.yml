@@ -1,0 +1,39 @@
+title: "lopuh@void"
+description: "embedded & systems programmer"
+author: "lopuh"
+email: "1opuhart@gmail.com"
+github: "L0puh"
+url: "https://lopuh.void"
+telegram: "l1opuh"
+baseurl: ""
+
+collections:
+  projects:
+    output: true
+    permalink: /projects/:name/
+
+markdown: kramdown
+highlighter: rouge
+
+kramdown:
+  syntax_highlighter: rouge
+
+permalink: /log/:year/:month/:day/:title/
+
+defaults:
+  - scope:
+      path: ""
+      type: "posts"
+    values:
+      layout: "post"
+  - scope:
+      path: ""
+      type: "projects"
+    values:
+      layout: "project"
+
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - node_modules
+  - vendor

@@ -1,0 +1,65 @@
+---
+layout: base
+---
+
+<div class="container container-narrow">
+
+  <div class="post-nav">
+    <a href="{{ '/projects/' | relative_url }}" class="back-link">← cd ../projects</a>
+  </div>
+
+  <article class="post-article">
+    <header class="post-header">
+      <div class="post-meta-top">
+        <span class="post-date-full">{{ page.date | date: "%Y.%m.%d" }}</span>
+        <span class="tag status-{{ page.status | downcase | replace: ' ', '-' }}">{{ page.status }}</span>
+      </div>
+      <h1 class="post-title-large">{{ page.title }}</h1>
+      {% if page.description %}
+      <p class="post-description">{{ page.description }}</p>
+      {% endif %}
+
+      <div class="project-links">
+        {% if page.github %}
+        <a href="{{ page.github }}" target="_blank" rel="noopener" class="btn">view on github</a>
+        {% endif %}
+        {% if page.demo %}
+        <a href="{{ page.demo }}" target="_blank" rel="noopener" class="btn btn-ghost">live demo</a>
+        {% endif %}
+      </div>
+
+      <div class="post-divider"></div>
+    </header>
+
+    {% if page.image %}
+    <div class="project-preview">
+      <img src="{{ page.image | relative_url }}" alt="{{ page.title }} preview" class="project-image">
+    </div>
+    {% endif %}
+
+    {% if page.gallery %}
+    <div class="project-gallery">
+      {% for img in page.gallery %}
+      <img src="{{ img | relative_url }}" alt="{{ page.title }}" class="gallery-image">
+      {% endfor %}
+    </div>
+    {% endif %}
+
+    {% if page.tech %}
+    <div class="project-meta-block">
+      <p class="block-label">// stack</p>
+      <div class="skill-tags">
+        {% for t in page.tech %}
+        <span class="tag">{{ t }}</span>
+        {% endfor %}
+      </div>
+    </div>
+    {% endif %}
+
+    <div class="post-content">
+      {{ content }}
+    </div>
+
+  </article>
+
+</div>

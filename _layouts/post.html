@@ -1,0 +1,55 @@
+---
+layout: base
+---
+
+<div class="container container-narrow">
+
+  <div class="post-nav">
+    <a href="{{ '/log/' | relative_url }}" class="back-link">← cd ../log</a>
+  </div>
+
+  <article class="post-article">
+    <header class="post-header">
+      <div class="post-meta-top">
+        <span class="post-date-full">{{ page.date | date: "%Y.%m.%d" }}</span>
+        {% if page.tags %}
+        <div class="post-tags">
+          {% for tag in page.tags %}
+          <span class="tag">{{ tag }}</span>
+          {% endfor %}
+        </div>
+        {% endif %}
+      </div>
+      <h1 class="post-title-large">{{ page.title }}</h1>
+      {% if page.description %}
+      <p class="post-description">{{ page.description }}</p>
+      {% endif %}
+      <div class="post-divider"></div>
+    </header>
+
+    <div class="post-content">
+      {{ content }}
+    </div>
+
+    <footer class="post-footer">
+      <div class="post-divider"></div>
+      <div class="post-footer-nav">
+        {% if page.previous.url %}
+        <a href="{{ page.previous.url | relative_url }}" class="post-nav-link">
+          <span class="dim">← prev</span>
+          <span>{{ page.previous.title }}</span>
+        </a>
+        {% else %}
+        <span></span>
+        {% endif %}
+        {% if page.next.url %}
+        <a href="{{ page.next.url | relative_url }}" class="post-nav-link post-nav-link-right">
+          <span class="dim">next →</span>
+          <span>{{ page.next.title }}</span>
+        </a>
+        {% endif %}
+      </div>
+    </footer>
+  </article>
+
+</div>
