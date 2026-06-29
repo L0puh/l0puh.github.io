@@ -32,10 +32,10 @@
 
   <footer class="site-footer">
     <div class="container">
-      <span class="footer-copy">© {{ 'now' | date: "%Y" }} {{ site.author }} </span>
+      <span class="footer-copy">(c) {{ 'now' | date: "%Y" }} {{ site.author }} </span>
       <div class="footer-links">
         <a href="https://github.com/{{ site.github }}" target="_blank" rel="noopener">github</a>
-        <a href="mailto:{{ site.email }}">email</a>
+        <a href="{{ '/contact/' | relative_url }}" {% if page.url contains '/contact' %}class="active"{% endif %}>contact</a>
       </div>
     </div>
   </footer>
