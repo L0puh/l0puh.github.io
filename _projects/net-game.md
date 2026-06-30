@@ -1,8 +1,8 @@
 ---
-title: "net-sync"
+title: "net-vault"
 date: 2023-07-14
 status: "archived"
-description: "sync game among clients and others network projects"
+description: "sync game among clients and other network projects"
 tech: ["c/c++", "sockets", "netinet", "tcp"] 
 github: "https://github.com/L0puh/network-game"
 ---

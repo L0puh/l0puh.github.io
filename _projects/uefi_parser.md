@@ -2,7 +2,7 @@
 title: "uefi-parser"
 date: 2026-01-23"
 status: "archived"
-description: "web chat based on my web library"
+description: "uefi images parser"
 tech: ["c++", "Makefile", "sql", "openssl"]
 github: "https://github.com/L0puh/uefi_parser"
 image: "https://github.com/L0puh/uefi_parser/blob/master/media/showcase.png?raw=true"
