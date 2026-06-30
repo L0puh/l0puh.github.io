@@ -43,7 +43,7 @@ permalink: /contact/
     <div class="contact-block">
       <p class="block-label">// note</p>
       <p class="contact-note">
-        for security disclosures use pgp. 
+          if your message is sensitive, encrypt it with my pgp key.
       </p>
     </div>
 
