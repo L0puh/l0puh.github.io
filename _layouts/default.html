@@ -64,7 +64,7 @@ layout: base
       <a href="{{ '/projects/' | relative_url }}" class="section-link">view all →</a>
     </div>
     <div class="post-list">
-      {% assign recent_projects = site.projects | limit: 3 %}
+      {% assign recent_projects = site.projects | sort: "date" | reverse | limit: 3 %}
       {% for project in recent_projects %}
       <a href="{{ project.url | relative_url }}" class="post-row">
         <span class="post-date">{{ project.date | date: "%Y" }}</span>
