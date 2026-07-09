@@ -44,8 +44,3 @@ sh run.sh
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-
-
-##  license
-
-this project is licensed under the MIT license 
