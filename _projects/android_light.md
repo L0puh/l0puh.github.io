@@ -6,48 +6,44 @@ description: "lightweight alternative for android compilation"
 tech: ["c++", "cmake", "imgui", "ndk", "xml"]
 github: "https://github.com/l0puh/android_light"
 ---
-# light android
+# lightweight android 
+lightweight way to compile android application without installing tons of software (i.e. android studio IDE). 
+it supports NDK and simple xml editor for adding minimal forms to apps. all things happen in the terminal.
 
-## overview
-
-lightweight alternative for android application development and compilation, completely **bypassing the need for the full android studio ide**.
-include  **native development kit (ndk) support** for integrating c/c++ code and a **custom xml editor** to simplify the creation of basic application structures and ui layouts.
+some of the tools are kind of outdated, so it works only for demos at the moment.
 
 ## features
 
-*   **standalone android compilation:** compile `.apk` files directly from your project source, without requiring android studio. 
-*   **full ndk support:** enabling the compilation and linking of native libraries into android applications.
-*   **custom xml editor:** lightweight xml editor to edit the layouts
+- standalone android compilation, no android studio
+- ndk support
+- xml editor 
+
 
 ## usage
-### create a template
+to create template of an app 
 ```sh 
 sh setup.sh --name your_name --domain your_domain --version your_android_version
 ```
-it ensures that all needed libraries and tools are installed, and creates a template folder to code your app in.
-```sh
-usage: setup.sh [options]
-
-options:
-  --name name        specify the name
-  --domain domain    specify the domain
-  --version version  specify the android version (34 by default)
-  --help             show this help message
-```
-### compilation and running of application 
+to compile and run the app (android device plugged in) 
 ```sh
 sh run.sh
 ```
-it compiles the code and runs it on your android device.
 
-### run the editor
+# editor 
 to create and edit new layouts, use the editor, located in ``editor`` folder.
-compile and run it with 
+compile and run it with (from editor directory)
 ```sh
 sh run.sh
 ```
-## preview
-![](https://github.com/user-attachments/assets/c8579eff-950b-48a9-b00b-f3304e7cc376)
+## Preview
+<img width="887"  alt="image" src="https://github.com/user-attachments/assets/c8579eff-950b-48a9-b00b-f3304e7cc376" />
+
+
+
+##  License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
 
 
 ##  license
