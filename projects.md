@@ -30,7 +30,8 @@ permalink: /projects/
       {% endif %}
       {% if project.tech %}
       <div class="skill-tags skill-tags-sm">
-        {% for t in project.tech | limit: 4 %}
+        {% assign tech_items = project.tech | limit: 4 %}
+        {% for t in tech_items %}
         <span class="tag tag-sm">{{ t }}</span>
         {% endfor %}
       </div>

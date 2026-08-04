@@ -1,7 +1,7 @@
 ---
 title: "aether"
 date: 2026-04-03
-status: "active"
+status: "archived"
 description: "bare-metal secure bootloader"
 tech: ["c", "stm32", "gdb", "python", "Makefile", "bash", "asm"]
 github: "https://github.com/L0puh/aether"
@@ -9,41 +9,175 @@ image: "https://github.com/user-attachments/assets/fa52e156-32a5-4e40-ae09-c55f4
 ---
 
 
-
-
 # aether
 
-A bare-metal Type-1 hypervisor for STM32F103C6T6 (Cortex-M3) that provides MPU-based task isolation without an MMU.
+minimal bootloader with bare metal hypervisor on blue pill.
 
 ## overview
 
-classical hypervisors rely on mmu-based virtual memory, which cortex-m microcontrollers simply don't have. **aether** uses only the mpu as the hardware isolation boundary, fitting into the tight resource constraints of a blue pill board. current target is STM32F103C6T6 (Blue Pill)
+it's a showcase of security model which is based on MPU & SVC with
+modular architecture, where app is embedded into bootloader and lacks its
+own vector table.
+
+bootloader receives calls, ensures a loaded
+app follows its manifest, handles interrupts and behaves 
+as a supervisor for the app. 
 
 ## architecture
+### MPU
 
-The system is composed of three layers:
+memory layout is based on MPU, bootloader & app have separate flash and ram
+regions. MPU configuration is as follows:
+```c
+[REG_NULL_GUARD] = {
+  .base = 0x00000000,
+  .attr_size = REGION_SIZE_256B | AP_PRIV_RO | XN_ENABLE,
+  .subreg_mask = 0,
+},
+[REG_HV_FLASH] = {
+  .base = FLASH_HV_ORIGIN,
+  .attr_size = REGION_SIZE_32KB | AP_PRIV_RO | XN_DISABLE,
+  .subreg_mask = 0,
+},
+[REG_HV_RAM] = {
+  .base = RAM_HV_ORIGIN,
+  .attr_size = REGION_SIZE_8KB | AP_PRIV_RW | XN_ENABLE,
+  .subreg_mask = 0,
+},
+[REG_APP_FLASH] = {
+  .base = FLASH_APP_ORIGIN,
+  .attr_size = REGION_SIZE_32KB | AP_PRIV_RW_USER_RO | XN_DISABLE,
+  .subreg_mask = 0,
+},
+[REG_APP_RAM] = {
+  .base = RAM_APP_ORIGIN,
+  .attr_size = REGION_SIZE_4KB | AP_PRIV_RW_USER_RW | XN_DISABLE,
+  .subreg_mask = 0,
+},
+[REG_RAM_GUARD] = {
+  .base = RAM_GUARD_ORIGIN,
+  .attr_size = REGION_SIZE_1KB | AP_NO_ACCESS | XN_ENABLE,
+  .subreg_mask = 0,
+},
+```
+it ensures that critical code is either non-accessible for an app or read
+only. it also has protection against stack overflow.
 
-- **bootloader** — privileged core that initializes the mpu, sets up the hypercall table, and launches application slots.
-- **hypervisor api** — a fixed-address function pointer table through which unprivileged applications access peripherals in a controlled way.
-- **applications** — user modules described by an `app_desc_t` descriptor (magic signature + entry point), loaded into dedicated flash slots.
+### SVC API
+```c
+extern int32_t hv_request_periph(u32 id, u32 perms);
+extern int32_t hv_wdt_kick(void);
+extern void    hv_exit(int32_t code) __attribute__((noreturn));
+```
+request peripheral call is based on preinitialized peripherals (in bootloader),
+specified in manifest. manifest itself is patched in build
+(with patch tool) and non-accessible for an app in runtime.
 
-on startup, the bootloader scans flash slots sequentially. for each valid module it reconfigures the mpu to that module's memory map, transfers control to the entry point, and resumes scanning after the application returns.
+### model
+bootloader uses MSP and the highest control:
+- initializes system, MPU & 
+peripherals
+- scans for app
+- ensures the integrity (CRC)
+- handles interrupts
+- handles watchdog, timers, SVC
 
-## isolation model
+when app is ready to run, the transition code takes place that drops
+privileges, changes to PSP stack and hops to app.
 
-mpu regions are configured per-application before each launch.
+this happens in two stages, `enter_app` goes with bootloader
+```asm
+enter_app:
+    @ r0 = psp value
+    @ r1 = entry point
 
-after an application returns, the mpu is placed into background mode, blocking all unprivileged accesses.
-every hv-call implementation validates that the call originates from unprivileged thread mode (not handler mode), preventing privilege escalation.
+    push  {r4, lr}
+    mov   r4, r1
 
-## building
+    msr   psp, r0
+    isb
 
-```sh
-make
+    mov   r3, #0
+    msr   primask, r3
+    msr   basepri, r3
+    cpsie i
+
+    mrs   r3, control
+    orr   r3, r3, #2
+    msr   control, r3
+    isb
+
+    bx    r4
+```
+and `app_start` is embedded into app's flash 
+```asm
+app_start:
+    mrs   r0, control
+    orr   r0, r0, #1
+    msr   control, r0
+    isb
+
+    bl    main
+
+    movs  r0, #0
+    svc   #2
+    b     .
+```
+on exit, privileges are restored
+```asm
+exit_landing:
+    mrs   r0, control
+    bic.w r0, r0, #2
+    msr   control, r0
+    isb
+    bl    bootloader_exit_hook
+    b     .
+
 ```
 
-no external os or libraries required. the only dependency is a ed25519 implementation included as a submodule.
+### memory map
+```c
 
-## license
+FLASH_HV_ORIGIN   0x08000000UL
+FLASH_HV_LENGTH   0x8000UL      /* 32K */ 
 
-MIT
+FLASH_APP_ORIGIN  0x08008000UL
+FLASH_APP_LENGTH  0x8000UL      /* 32K */
+
+APP_DESC_OFFSET   0x20UL        /* 32B */
+
+RAM_HV_ORIGIN     0x20000000UL
+RAM_HV_LENGTH     0x2000UL      /* 8K */
+
+RAM_GUARD_ORIGIN  0x20002000UL
+RAM_GUARD_LENGTH  0x400UL       /* 1K */ 
+
+RAM_APP_ORIGIN    0x20004000UL
+RAM_APP_LENGTH    0x1000UL      /* 4K */ 
+```
+## building
+
+build everything with make all, which includes the current module (`modules.mk`, in `CURRENT_MODULE`) and core
+library. 
+
+there are also the following commands:
+```bash
+make flash   
+make erase   
+make clean   
+make debug   
+make modules
+make list-modules
+make dump-app-%     
+make dump-boot
+make patch-%        # to patch app with manifest, CRC and etc
+make open-serial    # opens minicom with USB0
+```
+
+### how to run
+```bash
+make all 
+make flash # flash bootloader
+make reset 
+python tools/flash.py {app}.bin.patched /dev/USB{X} {BAUDRATE}
+```

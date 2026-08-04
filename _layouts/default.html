@@ -50,7 +50,7 @@ layout: base
       {% assign recent = site.posts | limit: 4 %}
       {% for post in recent %}
       <a href="{{ post.url | relative_url }}" class="post-row">
-        <span class="post-date">{{ post.date | date: "%Y.%m.%d" }}</span>
+        <span class="post-date">{{ post.date | date: "%Y" }}</span>
         <span class="post-title">{{ post.title }}</span>
         <span class="post-tag">{{ post.tags | first }}</span>
       </a>

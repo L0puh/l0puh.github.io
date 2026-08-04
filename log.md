@@ -19,7 +19,7 @@ permalink: /log/
       <p class="year-label">{{ year_group.name }}</p>
       {% for post in year_group.items %}
       <a href="{{ post.url | relative_url }}" class="post-row post-row-full">
-        <span class="post-date">{{ post.date | date: "%m.%d" }}</span>
+        <span class="post-date">{{ post.date | date: "%d.%m" }}</span>
         <span class="post-title">{{ post.title }}</span>
         <div class="post-row-meta">
           {% for tag in post.tags %}
