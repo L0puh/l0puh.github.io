@@ -9,7 +9,7 @@ tags: ["bare-metal", "c", "cortex-m3", "embedded"]
 
 ![](/assets/media/preview.png)
 # intro
-i got an idea to build a semi-hypervisor, or rather, a supervisor, for a cortex-M3 system (i've chosen blue pill because it's cheap and because i have tons of them). its CPU doesn't have TrustZone, memory management unit or the capabilities needed to recreate a fully functioning hypervisor like there are for general-purpose operating systems. more precisely, i was curious how to provide isolation for this microcontrollers in absent of all listed features. 
+i got an idea to build a semi-hypervisor, or rather, a supervisor, for a cortex-M3 system (i've chosen blue pill because it's cheap and because i have tons of them). its CPU doesn't have TrustZone, memory management unit or the capabilities needed to recreate a fully functioning hypervisor like there are for general-purpose operating systems. more precisely, i was curious how to provide isolation for such microcontrollers in the absence of all listed features.
 
 naturally i stumbled into the MPU and the two execution modes (handler and thread) together with privileged and unprivileged execution, with privileged code reachable only through the SVC instruction (supervisor call instruction). 
 
